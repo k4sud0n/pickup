@@ -48,7 +48,7 @@
     <div class="grid grid-cols-2 gap-10">
         {#each list as item, idx}
             <div class="flex flex-col">
-                <div class="flex justify-center items-center bg-slate-200 w-64 h-72">사진</div>
+                <div class="flex justify-center items-center bg-slate-200 min-h-72">사진</div>
                 <div>
                     <div class="font-semibold mt-2">{item.price.toLocaleString()}원</div>
                     <div>{truncateText(item.name)}</div>

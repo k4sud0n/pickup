@@ -26,3 +26,5 @@ vite.config.ts.timestamp-*
 .svelte-kit
 .npmrc
 bun.lockb
+test.http
+db.sqlite3
