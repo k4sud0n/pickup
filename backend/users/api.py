@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
+from django.http import JsonResponse
 from ninja import Router
 from django.contrib.auth import get_user_model
 from pydantic import BaseModel
@@ -25,7 +26,9 @@ def login_user(request, data: LoginSchema):
     if user is not None:
         login(request, user)
         return {"success": f"Welcome {user.username}"}
-    return {"error": "Invalid username or password"}
+    return JsonResponse(
+        {"message": "아이디나 패스워드를 다시요 한번 확인해주세요"}, status=400
+    )
 
 
 @router.post("/register")
@@ -37,4 +40,4 @@ def register(request, data: RegisterSchema):
         )
         return {"success": f"User {user.username} created successfully"}
     except IntegrityError:
-        return {"error": "Username already exists"}
+        return JsonResponse({"message": "이미 사용중인 아이디입니다"}, status=409)
