@@ -1,9 +1,9 @@
 <script>
-  import "../app.css";
+    import "../app.css";
 </script>
 
-<div class="flex justify-center min-h-screen bg-slate-100">
-    <div class="bg-white w-full max-w-screen-sm">
+<div class="flex min-h-screen justify-center bg-slate-100">
+    <div class="w-full max-w-screen-sm bg-white">
         <slot />
     </div>
 </div>

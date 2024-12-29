@@ -27,7 +27,7 @@ def login_user(request, data: LoginSchema):
         login(request, user)
         return {"success": f"Welcome {user.username}"}
     return JsonResponse(
-        {"message": "아이디나 패스워드를 다시요 한번 확인해주세요"}, status=400
+        {"message": "아이디 또는 비밀번호를 다시 확인하세요"}, status=400
     )
 
 
