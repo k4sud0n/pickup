@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 from django.middleware.csrf import get_token
@@ -50,6 +50,14 @@ def login_user(request, data: LoginSchema):
         )
         return response
     return {"message": "아이디 또는 비밀번호를 다시 확인하세요"}, 400
+
+
+@router.post("/logout", auth=django_auth)
+def logout_user(request):
+    logout(request)
+    response = Response({"message": "success"})
+    response.delete_cookie("sessionid")
+    return response
 
 
 @router.post("/register")

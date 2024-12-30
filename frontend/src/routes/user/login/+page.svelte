@@ -59,6 +59,9 @@
         <input type="password" bind:value={password} class="mt-2 min-w-full rounded border border-gray-300 p-2" placeholder="비밀번호를 입력하세요" />
     </div>
     <button class="mt-10 min-w-full rounded bg-blue-600 p-2 text-white" on:click={handleSubmit}>로그인</button>
+    <div class="mt-3 text-center text-sm text-blue-600 underline">
+        <a href="/user/register">계정이 아직 없으신가요?</a>
+    </div>
 </div>
 
 <Toaster />

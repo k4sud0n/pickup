@@ -10,5 +10,5 @@
     </svg>
     <h1 class="mt-4 text-3xl font-bold text-green-600">회원가입 성공!</h1>
     <p class="mt-4 text-lg">환영합니다, {username}님</p>
-    <a href="/" class="mt-6 text-blue-600 underline">홈으로 돌아가기</a>
+    <a href="/" class="mt-6 text-blue-600 underline">로그인하기</a>
 </div>
