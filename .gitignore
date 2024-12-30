@@ -28,3 +28,4 @@ vite.config.ts.timestamp-*
 bun.lockb
 test.http
 db.sqlite3
+settings.json

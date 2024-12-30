@@ -1,8 +1,47 @@
-<header>
-    <div class="m-5 flex items-center justify-between font-bold">
-        <div class="text-xl">Pickup</div>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-        </svg>
-    </div>
-</header>
+<script>
+    import axios from "axios";
+    import { writable } from "svelte/store";
+    import { goto } from "$app/navigation";
+    import toast, { Toaster } from "svelte-french-toast";
+
+    const user = writable(null);
+    const isAuthenticated = writable(false);
+
+    const getCsrfToken = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/api/v1/users/csrf-token", {
+                credentials: "include",
+            });
+            const data = await response.json();
+            return data.csrftoken;
+        } catch (error) {
+            console.error("Failed to fetch CSRF token", error);
+        }
+    };
+
+    const checkLoginStatus = async () => {
+        const csrftoken = await getCsrfToken();
+        try {
+            const response = await axios.get("http://localhost:8000/api/v1/users/", {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+            });
+            // 응답에서 받은 사용자 정보를 store에 저장
+            user.set(response.data.user);
+            isAuthenticated.set(true);
+        } catch (error) {
+            console.error("Error during login status check:", error);
+            user.set(null);
+            isAuthenticated.set(false);
+        }
+    };
+
+    checkLoginStatus();
+</script>
+
+<div>{$user?.username}</div>
+
+<Toaster />

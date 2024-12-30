@@ -1,6 +1,6 @@
 <script>
+    import axios from "axios";
     import { toastMessage } from "$lib/stores/toastStore";
-
     import { goto } from "$app/navigation";
     import toast, { Toaster } from "svelte-french-toast";
 
@@ -8,22 +8,37 @@
     let password = "";
 
     const handleSubmit = async () => {
-        const apiUrl = import.meta.env.VITE_API_URL;
+        try {
+            const csrfResponse = await axios.get("http://localhost:8000/api/v1/users/csrf-token", {
+                withCredentials: true,
+            });
+            const csrfToken = csrfResponse.data.csrftoken;
 
-        const response = await fetch(apiUrl + "/users/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-        });
+            const response = await axios.post(
+                "http://localhost:8000/api/v1/users/login",
+                { username, password },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken,
+                    },
+                    withCredentials: true,
+                },
+            );
 
-        if (response.ok) {
-            toastMessage.set("로그인 성공!");
-            goto("/");
-        } else {
-            const error = await response.json();
-            toast.error(error.message);
+            if (response.status === 200) {
+                const checkSession = await axios.get("http://localhost:8000/api/v1/users/", {
+                    withCredentials: true,
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                    },
+                });
+
+                toast.success("로그인 성공!");
+                goto("/");
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "로그인 실패");
         }
     };
 </script>
