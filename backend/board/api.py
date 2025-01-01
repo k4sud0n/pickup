@@ -3,7 +3,7 @@ import uuid
 from typing import List
 
 from django.conf import settings
-from ninja import Router, UploadedFile, File
+from ninja import Router, UploadedFile, File, Form
 from ninja.security import django_auth
 from pydantic import BaseModel
 
@@ -13,16 +13,11 @@ from board.models import Board
 router = Router()
 
 
-class CreateBoardSchema(BaseModel):
-    title: str
-    content: str
-
-
 class BoardSchema(BaseModel):
     id: int
-    title: str
+    name: str
     author: str
-    content: str
+    description: str
     created_at: str
 
     class Config:
@@ -35,7 +30,13 @@ def get_random_filename(original_filename):
 
 
 @router.post("/create", auth=django_auth)
-def create_article(request, data: CreateBoardSchema, file: UploadedFile = File(...)):
+def create_item(
+    request,
+    name: str = Form(...),
+    description: str = Form(...),
+    price: int = Form(...),
+    file: UploadedFile = File(...),
+):
     random_filename = get_random_filename(file.name)
     file_path = os.path.join("uploads", random_filename)
     full_path = os.path.join(settings.MEDIA_ROOT, file_path)
@@ -45,16 +46,17 @@ def create_article(request, data: CreateBoardSchema, file: UploadedFile = File(.
         for chunk in file.chunks():
             destination.write(chunk)
 
-    board = Board.objects.create(
-        title=data.title,
-        content=data.content,
+    item = Board.objects.create(
+        name=name,
         author=request.user,
         image=file_path,
+        description=description,
+        price=price,
     )
-    return {"message": "작성 완료", "id": board.id}
+    return {"message": "작성 완료", "id": item.id}
 
 
 @router.get("", response=List[BoardSchema])
-def get_articles(request):
+def get_item(request):
     articles = Board.objects.all().order_by("-created_at")
     return articles

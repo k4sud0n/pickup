@@ -8,14 +8,16 @@
     let password = "";
 
     const handleSubmit = async () => {
+        const apiUrl = import.meta.env.VITE_API_URL;
+
         try {
-            const csrfResponse = await axios.get("http://localhost:8000/api/v1/users/csrf-token", {
+            const csrfResponse = await axios.get(`${apiUrl}/users/csrf-token`, {
                 withCredentials: true,
             });
             const csrfToken = csrfResponse.data.csrftoken;
 
             const response = await axios.post(
-                "http://localhost:8000/api/v1/users/login",
+                `${apiUrl}/users/login`,
                 { username, password },
                 {
                     headers: {
@@ -27,7 +29,7 @@
             );
 
             if (response.status === 200) {
-                const checkSession = await axios.get("http://localhost:8000/api/v1/users/", {
+                const checkSession = await axios.get(`${apiUrl}/users/`, {
                     withCredentials: true,
                     headers: {
                         "X-CSRFToken": csrfToken,
