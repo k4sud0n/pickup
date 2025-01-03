@@ -8,7 +8,7 @@ class Board(models.Model):
     image = models.ImageField(upload_to="uploads/", null=False)
     description = models.TextField()
     price = models.PositiveIntegerField(null=False)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     likes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
