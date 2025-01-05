@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-
+    import { goto } from "$app/navigation"; // goto 함수 import
     import BottomNavigation from "../../components/BottomNavigation.svelte";
     import toast, { Toaster } from "svelte-french-toast";
 
@@ -48,9 +48,15 @@
                     withCredentials: true,
                 },
             );
+
+            // 응답 데이터에서 username과 itemId 추출
+            const { author, id: itemId } = response.data;
+
             toast.success("상품이 등록되었습니다!");
+
+            // 리다이렉트
+            await goto(`/@${author}/${itemId}`);
         } catch (error) {
-            console.error("오류 응답:", error.response.data); // 오류 상세 정보 확인
             toast.error("상품 등록에 실패했습니다.");
         }
     };

@@ -1,6 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import { toastMessage } from "$lib/stores/toastStore";
     import { timeSince } from "$lib/utils";
 
     import toast, { Toaster } from "svelte-french-toast";
@@ -40,11 +39,6 @@
             toast.error("데이터를 불러오는 중 오류가 발생했습니다.");
         }
     });
-
-    // 토스트 메시지 표시
-    if ($toastMessage) {
-        toast.success($toastMessage);
-    }
 
     // 텍스트 자르기 함수
     function truncateText(text) {

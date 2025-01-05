@@ -1,6 +1,8 @@
 <script>
     import { timeSince } from "$lib/utils";
 
+    import toast, { Toaster } from "svelte-french-toast";
+
     import BottomNavigation from "../../../components/BottomNavigation.svelte";
 
     export let data;
@@ -52,3 +54,5 @@
 {/if}
 
 <BottomNavigation />
+
+<Toaster />

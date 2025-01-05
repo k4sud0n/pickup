@@ -72,7 +72,7 @@ def create_item(
         description=description,
         price=price,
     )
-    return {"message": "작성 완료", "id": item.id}
+    return {"message": "작성 완료", "id": item.id, "author": request.user.username}
 
 
 @router.get("", response=List[ListSchema])

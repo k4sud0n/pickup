@@ -1,6 +1,5 @@
 <script>
     import axios from "axios";
-    import { toastMessage } from "$lib/stores/toastStore";
     import { goto } from "$app/navigation";
     import toast, { Toaster } from "svelte-french-toast";
 
